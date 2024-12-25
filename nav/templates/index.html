@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Map</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h1>Campus Map</h1>
+  <div id="map">
+    <div class="building" id="admin-block">ADMIN BLOCK</div>
+    <div class="building" id="civil-dept">Civil Dept</div>
+    <div class="ground" id="Ground">Ground</div>
+    <div class="building" id="cse-dept">CSE Dept</div>
+    <div class="building" id="health-centre">Health Centre</div>
+    <div class="building" id="eee-dept">EEE Dept</div>
+    <div class="building" id="ece-dept">ECE Dept</div>
+    <div class="building" id="library">LIBRARY</div>
+    <div class="building" id="telecommunication">Telecommunication Dept</div>
+    <div class="building" id="physics-dept">Chem Engg & Physics Dept</div>
+    <div class="building" id="hostel-krishna">Krishna Hostel</div>
+    <div class="building" id="hostel-cauvery">Cauvery Boys Hostel</div>
+    <div class="building" id="mathematics-dept">Mathematics Dept</div>
+    <div class="building" id="mechanical-dept">Mechanical Dept</div>
+    <div class="building" id="greenhouse">GREEN HOUSE</div>
+    <div class="building" id="DTH">Design Thinking Huddle</div>
+    <div class="open" id="Statue">Founder Statue</div>
+    <div class="building" id="biotech">Birtech Quadrangle</div>
+    <div class="building" id="sports">Sports Block</div>
+    <div class="building" id="RVU">RV University</div>
+    <div class="building " id="Bank">Kotak bank</div> 
+    <div class="garden" id="G"></div>   
+    <div class="garden" id="G1"></div>
+    <div class="garden" id="G2"></div> 
+    <div class="garden" id="G3"></div> 
+    <div class="garden" id="G4"></div> 
+    <div class="garden" id="G5"></div> 
+    <div class="building " id="RD">R&D Centre</div>
+    <div class="park" id="P1">P</div>
+    <div class="park" id="P2">P</div>
+    <div class="park" id="P3">P</div>
+    <div class="park" id="P4">P</div>
+    <div class="building " id="K">Kriyakalpa</div> 
+    <div class="building " id="M">Small Mingos</div>
+    <div class="building " id="R">IDRC lab</div>
+    <div class="building " id="T">T</div>
+    <div class="building " id="I">Innovation Centre</div>
+    <div class="building " id="IEM">IEM</div>
+    <div class="park" id="P5">P</div>
+   
+
+    <div id="map1" class="map">
+        <div class="location" id="main-gate" style="top: 108px; left: 85px;">Main Gate</div>
+        <div class="location" id="civil-dept" style="top: 85px; left: 88px;">Civil Department</div>
+        <div class="location" id="kotak-bank" style="top: 103px; left: 100px;">Kotak Bank</div>
+        <!-- Add other locations with appropriate coordinates -->
+    </div>
+    <canvas id="mapCanvas" class="map-canvas"></canvas>
+    
+
+    <form id="navigation-form">
+      <label for="start">Start:</label>
+      <input type="text" id="start" name="start" placeholder="Enter Start Location">
+      <label for="destination">Destination:</label>
+      <input type="text" id="destination" name="destination" placeholder="Enter Destination">
+      <button type="submit">Get Directions</button>
+  </form>
+  <div id="output"></div>
+  <script>
+      document.getElementById("navigation-form").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const start = document.getElementById("start").value;
+          const destination = document.getElementById("destination").value;
+
+          const response = await fetch('/navigate', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ start, destination })
+          });
+
+          const result = await response.json();
+          const outputDiv = document.getElementById("output");
+
+          if (response.ok) {
+              outputDiv.innerHTML = `
+                  <h2>Directions:</h2>
+                  <p>${result.path.join(' -> ')}</p>
+                  <p>Total Distance: ${result.distance.toFixed(2)} units</p>
+              `;
+              // Highlight path on your map
+              highlightPath(result.path);
+          } else {
+              outputDiv.innerHTML = `<p>Error: ${result.error}</p>`;
+          }
+      });
+
+      function highlightPath(path) {
+          // Implement this function to visually highlight the path on your map
+          console.log("Path to highlight:", path);
+      }
+  </script>
+
+<script src="app.js"></script>
+
+  </div>
+
+ 
+</body>
+</html>
